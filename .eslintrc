@@ -1,37 +1,30 @@
 {
-  "parser": "@babel/eslint-parser",
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
   "extends": [
-    "airbnb",
-    "prettier"
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react"
   ],
   "rules": {
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [
-          ".js"
-        ]
-      }
-    ],
-    "indent": [
-      "error",
-      4
-    ],
-    "react/jsx-indent": [
-      "error",
-      4
-    ],
-    "react/jsx-indent-props": [
-      "error",
-      4
-    ],
-    "func-names": [
-      "error",
-      "as-needed"
-    ]
-  },
-  "globals": {
-    "window": true,
-    "document": true
+      "indent": [
+        "error",
+        4
+      ],
+      "func-names": [
+        "error",
+        "as-needed"
+      ]
   }
 }
