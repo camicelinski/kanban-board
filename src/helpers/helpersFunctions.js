@@ -78,3 +78,6 @@ export const setDeadlineClassName = (deadlineDate, idColumn, columns) => {
 };
 
 export const getColumnTasksQuantity = (tasks, id) => getColumnTasksList(tasks, id).length;
+
+export const isNavBtnDisabled = (direction, columns, columnId) =>
+    (direction === 'prev' && columnId === 1) || (direction === 'next' && columnId === columns.length);

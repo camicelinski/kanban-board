@@ -10,7 +10,7 @@ const Column = (props) => {
         data: { id, name, limit, isDivided },
     } = props;
 
-    const tasks = useContext(TasksContext);
+    const { tasks } = useContext(TasksContext);
     console.log(tasks);
     // const tasks = [];
 

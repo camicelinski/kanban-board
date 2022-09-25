@@ -1,5 +1,5 @@
 function useStorage() {
-    const saveToStorage = (tasks, task) => localStorage.setItem('tasks', JSON.stringify([...tasks, task]));
+    const saveToStorage = (tasks) => localStorage.setItem('tasks', JSON.stringify([...tasks]));
 
     const getFromStorage = () => JSON.parse(localStorage.getItem('tasks'));
 

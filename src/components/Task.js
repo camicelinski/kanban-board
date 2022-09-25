@@ -1,13 +1,16 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { ColumnsContext } from '../context';
-import { setDateFormat, setDeadlineClassName } from '../helpers/helpersFunctions';
+import { ColumnsContext, TasksContext } from '../context';
+import { setDateFormat, setDeadlineClassName, isNavBtnDisabled } from '../helpers/helpersFunctions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faArrowRightLong, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import './styles/Task.css';
 
 const Task = function Task(props) {
     const {
         data: { taskName, owner, email, date, description, idColumn },
     } = props;
+    const { moveTask, moveBackTask, deleteTask } = useContext(TasksContext);
 
     // const tasks = useContext(TasksContext);
     const columns = useContext(ColumnsContext);
@@ -70,7 +73,37 @@ const Task = function Task(props) {
     return (
         <li className="column__item item">
             <span className="item__pin" />
-            <article className="item__task">{renderTaskInfo()}</article>
+            <article className="item__task">
+                {renderTaskInfo()}
+                <footer className="item__footer">
+                    <button
+                        className="item__btn item__btn--prev"
+                        onClick={() => moveBackTask(props.data)}
+                        type="button"
+                        title="move to previous section"
+                        disabled={isNavBtnDisabled('prev', columns, idColumn)}
+                    >
+                        {<FontAwesomeIcon icon={faArrowLeftLong} />}
+                    </button>
+                    <button
+                        className="item__btn item__btn--remove"
+                        onClick={() => deleteTask(props.data)}
+                        type="button"
+                        title="remove task"
+                    >
+                        {<FontAwesomeIcon icon={faTrashAlt} />}
+                    </button>
+                    <button
+                        className="item__btn item__btn--next"
+                        onClick={() => moveTask(props.data)}
+                        type="button"
+                        title="move to next section"
+                        disabled={isNavBtnDisabled('next', columns, idColumn)}
+                    >
+                        {<FontAwesomeIcon icon={faArrowRightLong} />}
+                    </button>
+                </footer>
+            </article>
         </li>
     );
 };
@@ -86,6 +119,11 @@ Task.propTypes = {
         idColumn: PropTypes.number,
         isDoing: PropTypes.bool,
     }),
+    moveTask: PropTypes.func,
+    moveBackTask: PropTypes.func,
+    deleteTask: PropTypes.func,
 };
 
 export default Task;
+
+21189087;
