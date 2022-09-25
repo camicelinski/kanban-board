@@ -1,3 +1,5 @@
+import { getCurrentDate } from './helpersFunctions';
+
 export default function validateForm(fields, values) {
     const errors = [];
 
@@ -14,9 +16,20 @@ export default function validateForm(fields, values) {
             }
         }
 
-        if (pattern && value.length > 0) {
+        if (pattern && value.length > 0 && name !== 'date') {
             const reg = new RegExp(pattern);
             if (!reg.test(value)) {
+                errors.push({
+                    text: errortype,
+                    field,
+                });
+            }
+        }
+
+        if (name === 'date') {
+            const currentDate = getCurrentDate();
+            const inputDate = new Date(value);
+            if (inputDate < new Date(currentDate)) {
                 errors.push({
                     text: errortype,
                     field,

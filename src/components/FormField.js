@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 
 const FormField = (props) => {
     const handleChange = (e) => {
-        const { dispatch, field } = props;
-        // const { name, value } = e.target;
+        const { dispatch } = props;
+        const { name, value } = e.target;
         dispatch({
-            key: field.name,
-            value: e.target.value,
+            type: 'change-value',
+            payload: { name, value },
+            // key: field.name,
+            // value: e.target.value,
             // type: 'change-value',
             // payload: { name, value },
         });
@@ -28,7 +30,7 @@ const FormField = (props) => {
                     id={name}
                     name={name}
                     type={type}
-                    value={formState[name].value}
+                    value={formState[name]}
                     onChange={handleChange}
                     autoComplete="off"
                 />

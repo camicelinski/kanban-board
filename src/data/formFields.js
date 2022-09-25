@@ -30,7 +30,7 @@ const fields = [
         name: 'date',
         label: 'deadline',
         type: 'date',
-        defaultValue: 'mm/dd/yyyy',
+        defaultValue: '',
         pattern: /^20\d{2}[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[12]\d|3[01])$/,
         errortype: 'today, in the future or empty',
         required: false,
