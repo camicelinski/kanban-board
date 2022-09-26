@@ -1,20 +1,46 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { ColumnsContext, TasksContext } from '../context';
-import { setDateFormat, setDeadlineClassName, isNavBtnDisabled } from '../helpers/helpersFunctions';
+import {
+    setDateFormat,
+    setDeadlineClassName,
+    isNavBtnDisabled,
+    getColumnById,
+    isColumnDivided,
+} from '../helpers/helpersFunctions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong, faArrowRightLong, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import './styles/Task.css';
 
 const Task = function Task(props) {
     const {
-        data: { taskName, owner, email, date, description, idColumn },
+        data: { id, taskName, owner, email, date, description, idColumn, isDoing },
     } = props;
-    const { moveTask, moveBackTask, deleteTask } = useContext(TasksContext);
-
-    // const tasks = useContext(TasksContext);
+    const { tasks, moveTask, moveBackTask, moveTaskInsideColumn, deleteTask } = useContext(TasksContext);
+    console.log(tasks);
     const columns = useContext(ColumnsContext);
     // const moveTask = useContext(EditTasksContext);
+
+    const handleTaskMove = (direction) => {
+        const [currentColumn] = getColumnById(idColumn, columns);
+        const isCurrentColumnDivided = isColumnDivided(currentColumn);
+        return isCurrentColumnDivided && ((direction === 'next' && isDoing) || (direction === 'prev' && !isDoing))
+            ? moveTaskInsideColumn(id, isDoing)
+            : moveTaskOutsideColumn(direction);
+    };
+
+    // const moveInsideColumn = () => moveTask({ type: TASKS_ACTIONS.MOVE, payload: { id, isDoing: !isDoing } });
+
+    const moveTaskOutsideColumn = (direction) => {
+        if (direction === 'next') {
+            moveTask(props.data);
+        }
+        if (direction === 'prev') {
+            const [prevColumn] = getColumnById(idColumn - 1, columns);
+            const isPrevColumnDivided = isColumnDivided(prevColumn);
+            moveBackTask(props.data, isPrevColumnDivided);
+        }
+    };
 
     const renderTaskInfo = () => (
         <>
@@ -78,7 +104,8 @@ const Task = function Task(props) {
                 <footer className="item__footer">
                     <button
                         className="item__btn item__btn--prev"
-                        onClick={() => moveBackTask(props.data)}
+                        onClick={() => handleTaskMove('prev')}
+                        // onClick={() => moveBackTask(props.data)}
                         type="button"
                         title="move to previous section"
                         disabled={isNavBtnDisabled('prev', columns, idColumn)}
@@ -95,7 +122,8 @@ const Task = function Task(props) {
                     </button>
                     <button
                         className="item__btn item__btn--next"
-                        onClick={() => moveTask(props.data)}
+                        onClick={() => handleTaskMove('next')}
+                        // onClick={() => moveTask(props.data)}
                         type="button"
                         title="move to next section"
                         disabled={isNavBtnDisabled('next', columns, idColumn)}
@@ -125,5 +153,3 @@ Task.propTypes = {
 };
 
 export default Task;
-
-21189087;

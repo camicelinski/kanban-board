@@ -29,7 +29,7 @@ export const createNewTask = ({ taskName, owner, email, date, description }) => 
     email,
     date,
     description,
-    isDoing: false,
+    isDoing: true,
     idColumn: 1,
 });
 
@@ -81,3 +81,7 @@ export const getColumnTasksQuantity = (tasks, id) => getColumnTasksList(tasks, i
 
 export const isNavBtnDisabled = (direction, columns, columnId) =>
     (direction === 'prev' && columnId === 1) || (direction === 'next' && columnId === columns.length);
+
+export const getColumnById = (columnId, columns) => columns.filter((col) => col.id === columnId);
+
+export const isColumnDivided = (column) => column.isDivided;

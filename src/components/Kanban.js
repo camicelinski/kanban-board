@@ -47,35 +47,50 @@ const Kanban = function Kanban() {
         if (taskQty < columns[nextCol - 1].limit) {
             taskList.forEach((taskToMove) => {
                 if (taskToMove.id === task.id) {
-                    taskToMove.columnId++;
+                    taskToMove.idColumn++;
+                    taskToMove.isDoing = true;
                 }
             });
             saveToStorage(taskList);
             setTasks(getFromStorage() || []);
         } else {
-            alert('This column is full. Task limit cannot be exceeded.');
+            alert('The next column is full. Task limit cannot be exceeded.');
         }
     };
 
-    const moveBackTask = (task) => {
-        if (task.columnId === 1) {
+    const moveBackTask = (task, isPrevColumnDivided) => {
+        if (task.idColumn === 1) {
             return;
         }
         let taskList = [...tasks];
-        const prevCol = task.columnId - 1;
-        const taskQty = taskList.filter((task) => task.columnId === prevCol).length;
+        const prevCol = task.idColumn - 1;
+        const taskQty = taskList.filter((task) => task.idColumn === prevCol).length;
 
         if (taskQty < columns[prevCol - 1].limit) {
             taskList.forEach((taskToMove) => {
                 if (taskToMove.id === task.id) {
-                    taskToMove.columnId--;
+                    taskToMove.idColumn--;
+                    if (isPrevColumnDivided) {
+                        taskToMove.isDoing = false;
+                    }
                 }
             });
             saveToStorage(taskList);
             setTasks(getFromStorage() || []);
         } else {
-            alert('This column is full. Task limit cannot be exceeded.');
+            alert('The previous column is full. Task limit cannot be exceeded.');
         }
+    };
+
+    const moveTaskInsideColumn = (id, isDoing) => {
+        let taskList = [...tasks];
+        taskList.forEach((taskToMove) => {
+            if (taskToMove.id === id) {
+                taskToMove.isDoing = !isDoing;
+            }
+        });
+        saveToStorage(taskList);
+        setTasks(getFromStorage() || []);
     };
 
     const deleteTask = (task) => {
@@ -100,7 +115,7 @@ const Kanban = function Kanban() {
                     <button>clear board</button>
                 </div>
             </header>
-            <TasksContext.Provider value={{ tasks, moveTask, moveBackTask, deleteTask }}>
+            <TasksContext.Provider value={{ tasks, moveTask, moveBackTask, moveTaskInsideColumn, deleteTask }}>
                 <Board />
             </TasksContext.Provider>
         </main>
