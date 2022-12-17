@@ -14,7 +14,6 @@
 .modal__confirm,
 .modal__cancel {
     border-radius: 12px;
-    box-shadow: var(--box-shadow-btn);
     color: var(--white-basic);
     font-weight: 700;
     letter-spacing: var(--letter-spacing-basic);

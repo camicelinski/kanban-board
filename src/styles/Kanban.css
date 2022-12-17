@@ -1,6 +1,6 @@
 .bar {
-    background: var(--white-basic);
     box-shadow: var(--box-shadow-header);
+    background: var(--white-modal-bg-content);
     position: sticky;
     top: 0;
     z-index: 2;
@@ -11,6 +11,7 @@
 }
 
 .bar__title {
+    font-family: 'Rubik', Arial, sans-serif;
     font-size: 2.2rem;
     font-weight: 400;
     letter-spacing: var(--letter-spacing-mid);
@@ -19,27 +20,36 @@
 }
 
 .bar__highlight {
-    font-weight: 700;
+    font-weight: bold;
+    font-size: 2.4rem;
 }
 
 .bar__wrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
 }
 
-.bar__btn {
-    box-shadow: var(--box-shadow-btn);
+.bar__btn {    
+    margin-left: 15px;
     color: var(--white-basic);
     font-weight: 700;
     letter-spacing: var(--letter-spacing-basic);
     padding: 0.5rem 0;
-    width: 45%;
+    max-width: 35%;
 }
 
 .bar__btn--add {
     background: var(--green-basic);
     border-bottom-right-radius: 12px;
     border-top-right-radius: 12px;
+}
+
+.bar__btn--add:hover {
+    background: var(--green-hover);
+}
+
+.bar__btn--clear:hover {
+    background: var(--red-hover);
 }
 
 .bar__btn--clear {

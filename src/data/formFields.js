@@ -36,7 +36,7 @@ const fields = [
         required: false,
     },
     {
-        name: 'description',
+        name: 'message',
         label: 'description',
         fieldName: 'textarea',
         defaultValue: '',

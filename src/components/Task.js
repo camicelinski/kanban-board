@@ -15,6 +15,16 @@ import {
 } from '../helpers/helpersFunctions';
 import Confirmation from './Confirmation';
 import '../styles/Task.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+    faArrowRight,
+    faArrowLeft,
+    faTrashAlt,
+    faUser,
+    faAt,
+    faInfo,
+    faHourglassEnd
+} from '@fortawesome/free-solid-svg-icons';
 
 const Task = (props) => {
     const {
@@ -72,7 +82,10 @@ const Task = (props) => {
             return (
                 <p className="item__info">
                     <span className="item__label">
-                        <i className="fas fa-info item__icon" />
+                        <FontAwesomeIcon 
+                            icon={faInfo}
+                            className="fas fa-info item__icon"
+                        />
                     </span>
                     <span className="item__description">{message}</span>
                 </p>
@@ -85,7 +98,10 @@ const Task = (props) => {
         if (date) {
             return (
                 <p className={setDeadlineClassName(date, idColumn, columns)}>
-                    <i className="fas fa-hourglass-end item__icon item__icon--deadline" />
+                    <FontAwesomeIcon 
+                        icon={faHourglassEnd}
+                        className="fas fa-hourglass-end item__icon item__icon--deadline"
+                    />
                     {setDateFormat(date)}
                 </p>
             );
@@ -102,13 +118,19 @@ const Task = (props) => {
             <div className="item__detail">
                 <p className="item__info">
                     <span className="item__label">
-                        <i className="fas fa-user-ninja item__icon" />
+                        <FontAwesomeIcon 
+                            icon={faUser}
+                            className="fas fa-user-ninja item__icon"
+                        />
                     </span>
                     <span className="item__description">{owner}</span>
                 </p>
                 <p className="item__info">
                     <span className="item__label">
-                        <i className="fas fa-at item__icon" />
+                        <FontAwesomeIcon 
+                            icon={faAt}
+                            className="fas fa-at item__icon"
+                        />
                     </span>
                     <span className="item__description">
                         <a className="item__link" href={`mailto:${email}`}>
@@ -134,7 +156,10 @@ const Task = (props) => {
                         title="move to previous section"
                         disabled={isNavBtnDisabled('prev', columns, idColumn)}
                     >
-                        <i className="fas fa-arrow-left item__icon" />
+                        <FontAwesomeIcon 
+                            icon={faArrowLeft}
+                            className="fas fa-arrow-left item__icon"
+                        />
                     </button>
                     <button
                         className="item__btn item__btn--remove"
@@ -142,7 +167,10 @@ const Task = (props) => {
                         type="button"
                         title="remove task"
                     >
-                        <i className="far fa-trash-alt item__icon item__icon" />
+                        <FontAwesomeIcon 
+                            icon={faTrashAlt}
+                            className="far fa-trash-alt item__icon item__icon"
+                        />
                     </button>
                     <button
                         className="item__btn item__btn--next"
@@ -151,7 +179,10 @@ const Task = (props) => {
                         title="move to next section"
                         disabled={isNavBtnDisabled('next', columns, idColumn)}
                     >
-                        <i className="fas fa-arrow-right item__icon" />
+                        <FontAwesomeIcon
+                            icon={faArrowRight}
+                            className="fas fa-arrow-right item__icon"
+                        />
                     </button>
                 </footer>
             </article>

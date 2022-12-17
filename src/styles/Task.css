@@ -1,8 +1,9 @@
 .item {
     background: var(--gradient-stickynote);
     border-bottom-right-radius: 60px 5px;
-    border: 1px solid var(--white-border-stickynote);
+    /*border: 1px solid var(--white-border-stickynote);*/
     border-top: 1px solid var(--yellow-border-stickynote);
+    box-shadow: var(--box-shadow-stickynote);
     display: flex;
     flex-direction: column;
     justify-content: stretch;

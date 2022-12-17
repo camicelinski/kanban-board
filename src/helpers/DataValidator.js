@@ -25,7 +25,7 @@ export default class DataValidator {
         required: false,
     };
 
-    description = {
+    message = {
         regExp: /^.{5,}$/,
         err: 'min. 5 characters or empty',
         required: false,

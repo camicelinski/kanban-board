@@ -8,8 +8,11 @@ html {
     padding: 0;
 }
 
-body {
-    font-family: 'Montserrat', sans-serif;
+body {    
+    font-family: 'Karla', Arial, sans-serif;    
+    background-image: url(../img/cork-board.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 ul,

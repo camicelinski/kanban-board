@@ -40,14 +40,12 @@ const Kanban = () => {
         showModal();
     };
 
-    const showBoardMsg = () => (tasks.length === 0 ? 'add tasks and keep doing' : 'track progress');
-
     return (
         <main className="app">
             <header className="app__bar bar">
                 <div className="bar__container">
                     <h1 className="bar__title">
-                        team <span className="bar__highlight">board</span>
+                        <span className="bar__highlight">Kanban</span> board
                     </h1>
                     <div className="bar__wrapper">
                         <button
@@ -70,9 +68,6 @@ const Kanban = () => {
                     </div>
                 </div>
             </header>
-            <section className="app__information">
-                <p className="app__msg">{showBoardMsg()}</p>
-            </section>
             <TasksContext.Provider value={tasks}>
                 <EditContext.Provider value={dispatch}>
                     <Board />
