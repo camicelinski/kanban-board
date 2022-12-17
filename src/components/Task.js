@@ -1,48 +1,99 @@
+/* eslint-disable react/prop-types */
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { ColumnsContext, TasksContext } from '../context';
+import { ColumnsContext, EditContext, TasksContext } from '../context';
+import { useModal } from '../hooks';
+import { TASKS_ACTIONS } from '../actions/actions';
 import {
-    setDateFormat,
-    setDeadlineClassName,
+    setFullColumnInfo,
     isNavBtnDisabled,
     getColumnById,
     isColumnDivided,
+    getFollowingColumnId,
+    isColumnFull,
+    setDateFormat,
+    setDeadlineClassName,
 } from '../helpers/helpersFunctions';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong, faArrowRightLong, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import './styles/Task.css';
+import Confirmation from './Confirmation';
+import '../styles/Task.css';
 
-const Task = function Task(props) {
+const Task = (props) => {
     const {
-        data: { id, taskName, owner, email, date, description, idColumn, isDoing },
+        data: { id, taskName, owner, email, date, message, idColumn, isDoing },
     } = props;
-    const { tasks, moveTask, moveBackTask, moveTaskInsideColumn, deleteTask } = useContext(TasksContext);
-    console.log(tasks);
+
+    const [ModalWithContent, showModal, closeModal, setContent] = useModal();
+
+    const tasks = useContext(TasksContext);
     const columns = useContext(ColumnsContext);
-    // const moveTask = useContext(EditTasksContext);
+    const moveTask = useContext(EditContext);
+
+    const moveTaskToColumn = (direction, followingColumnId) => {
+        const setIsDoing = direction === 'next';
+        return moveTask({
+            type: TASKS_ACTIONS.MOVE,
+            payload: { id, idColumn: followingColumnId, isDoing: setIsDoing },
+        });
+    };
+
+    const stopMove = (column) => {
+        const columnName = column.name;
+        setContent(setFullColumnInfo(columnName));
+        showModal();
+    };
+
+    const moveOutsideColumn = (direction) => {
+        const followingColumnId = getFollowingColumnId(direction, idColumn);
+        const [followingColumn] = getColumnById(followingColumnId, columns);
+        const isFollowingColumnFull = isColumnFull(followingColumn, followingColumnId, tasks);
+        return isFollowingColumnFull
+            ? stopMove(followingColumn)
+            : moveTaskToColumn(direction, followingColumnId);
+    };
+
+    const moveInsideColumn = () =>
+        moveTask({ type: TASKS_ACTIONS.MOVE, payload: { id, isDoing: !isDoing } });
 
     const handleTaskMove = (direction) => {
         const [currentColumn] = getColumnById(idColumn, columns);
         const isCurrentColumnDivided = isColumnDivided(currentColumn);
-        return isCurrentColumnDivided && ((direction === 'next' && isDoing) || (direction === 'prev' && !isDoing))
-            ? moveTaskInsideColumn(id, isDoing)
-            : moveTaskOutsideColumn(direction);
+        return isCurrentColumnDivided &&
+            ((direction === 'next' && isDoing) || (direction === 'prev' && !isDoing))
+            ? moveInsideColumn()
+            : moveOutsideColumn(direction);
     };
 
-    // const moveInsideColumn = () => moveTask({ type: TASKS_ACTIONS.MOVE, payload: { id, isDoing: !isDoing } });
-
-    const moveTaskOutsideColumn = (direction) => {
-        if (direction === 'next') {
-            moveTask(props.data);
-        }
-        if (direction === 'prev') {
-            const [prevColumn] = getColumnById(idColumn - 1, columns);
-            const isPrevColumnDivided = isColumnDivided(prevColumn);
-            moveBackTask(props.data, isPrevColumnDivided);
-        }
+    const handleRemove = () => {
+        setContent(<Confirmation closeModal={closeModal} id={id} taskName={taskName} />);
+        showModal();
     };
 
-    const renderTaskInfo = () => (
+    const renderDescription = () => {
+        if (message) {
+            return (
+                <p className="item__info">
+                    <span className="item__label">
+                        <i className="fas fa-info item__icon" />
+                    </span>
+                    <span className="item__description">{message}</span>
+                </p>
+            );
+        }
+        return null;
+    };
+
+    const renderDeadline = () => {
+        if (date) {
+            return (
+                <p className={setDeadlineClassName(date, idColumn, columns)}>
+                    <i className="fas fa-hourglass-end item__icon item__icon--deadline" />
+                    {setDateFormat(date)}
+                </p>
+            );
+        }
+        return null;
+    };
+
+    const renderItemInfo = () => (
         <>
             <header className="item__header">
                 <h3 className="item__name">{taskName}</h3>
@@ -70,86 +121,43 @@ const Task = function Task(props) {
         </>
     );
 
-    const renderDeadline = () => {
-        if (date) {
-            return (
-                <p className={setDeadlineClassName(date, idColumn, columns)}>
-                    <i className="fas fa-hourglass-end item__icon item__icon--deadline" />
-                    {setDateFormat(date)}
-                </p>
-            );
-        }
-        return null;
-    };
-
-    const renderDescription = () => {
-        if (description) {
-            return (
-                <p className="item__info">
-                    <span className="item__label">
-                        <i className="fas fa-info item__icon" />
-                    </span>
-                    <span className="item__description">{description}</span>
-                </p>
-            );
-        }
-        return null;
-    };
-
     return (
         <li className="column__item item">
             <span className="item__pin" />
             <article className="item__task">
-                {renderTaskInfo()}
+                {renderItemInfo()}
                 <footer className="item__footer">
                     <button
                         className="item__btn item__btn--prev"
                         onClick={() => handleTaskMove('prev')}
-                        // onClick={() => moveBackTask(props.data)}
                         type="button"
                         title="move to previous section"
                         disabled={isNavBtnDisabled('prev', columns, idColumn)}
                     >
-                        {<FontAwesomeIcon icon={faArrowLeftLong} />}
+                        <i className="fas fa-arrow-left item__icon" />
                     </button>
                     <button
                         className="item__btn item__btn--remove"
-                        onClick={() => deleteTask(props.data)}
+                        onClick={() => handleRemove()}
                         type="button"
                         title="remove task"
                     >
-                        {<FontAwesomeIcon icon={faTrashAlt} />}
+                        <i className="far fa-trash-alt item__icon item__icon" />
                     </button>
                     <button
                         className="item__btn item__btn--next"
                         onClick={() => handleTaskMove('next')}
-                        // onClick={() => moveTask(props.data)}
                         type="button"
                         title="move to next section"
                         disabled={isNavBtnDisabled('next', columns, idColumn)}
                     >
-                        {<FontAwesomeIcon icon={faArrowRightLong} />}
+                        <i className="fas fa-arrow-right item__icon" />
                     </button>
                 </footer>
             </article>
+            <ModalWithContent />
         </li>
     );
-};
-
-Task.propTypes = {
-    data: PropTypes.shape({
-        id: PropTypes.string,
-        taskName: PropTypes.string,
-        owner: PropTypes.string,
-        email: PropTypes.string,
-        date: PropTypes.string,
-        description: PropTypes.string,
-        idColumn: PropTypes.number,
-        isDoing: PropTypes.bool,
-    }),
-    moveTask: PropTypes.func,
-    moveBackTask: PropTypes.func,
-    deleteTask: PropTypes.func,
 };
 
 export default Task;

@@ -1,18 +1,22 @@
+import { FORM_ACTIONS } from '../actions/actions';
 import { createInitStateObj } from '../helpers/helpersFunctions';
 
 const formReducer = (state, action) => {
     const { type } = action;
     switch (type) {
-        case 'change-value': {
+        case FORM_ACTIONS.CHANGE_VALUE: {
             const {
                 payload: { name, value },
             } = action;
             return {
                 ...state,
-                [name]: value,
+                [name]: {
+                    ...state[name],
+                    value,
+                },
             };
         }
-        /*case FORM_ACTIONS.SET_INVALID: {
+        case FORM_ACTIONS.SET_INVALID: {
             const {
                 payload: { name },
             } = action;
@@ -37,8 +41,8 @@ const formReducer = (state, action) => {
                     isFill: true,
                 },
             };
-        }*/
-        case 'reset':
+        }
+        case FORM_ACTIONS.CLEAR_FORM:
             return createInitStateObj();
         default:
             return state;

@@ -1,62 +1,61 @@
-import React, { useReducer, useState } from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+import React, { useReducer, useState, useContext } from 'react';
 import FormField from './FormField';
+import DataValidator from '../helpers/DataValidator';
 import fields from '../data/formFields';
-import validateForm from '../helpers/validateForm';
-import { convertArrToObj, createInitStateObj, createNewTask } from '../helpers/helpersFunctions';
+import {
+    convertArrToObj,
+    getInputsNames,
+    isObjectEmpty,
+    createInitStateObj,
+} from '../helpers/helpersFunctions';
 import { formReducer } from '../reducers';
-// import { EditTasksContext } from '../context';
+import { FORM_ACTIONS, TASKS_ACTIONS } from '../actions/actions';
+import { EditContext } from '../context';
+import '../styles/Form.css';
 
 const Form = (props) => {
-    /*const init = {};
-    const setInitFields = () => {
-        fields.forEach(({ name, defaultValue }) => {
-            init[name] = defaultValue;
+    const editTasks = useContext(EditContext);
+    const [state, dispatch] = useReducer(formReducer, createInitStateObj());
+    const [errors, setErrors] = useState({});
+
+    const markInputInvalid = (errorsArr, err, inputName) => {
+        errorsArr.push(err);
+        dispatch({
+            type: FORM_ACTIONS.SET_INVALID,
+            payload: { name: inputName },
         });
     };
-    setInitFields();*/
 
-    // const editTasks = useContext(EditTasksContext); // dispatch tasksReducer
-    const [state, dispatch] = useReducer(formReducer, createInitStateObj());
-    const [errors, setErrors] = useState([]);
-
-    const { setNewTask } = props;
-    // const reducer = (state, { key, value }) => {
-    //    return { ...state, [key]: value };
-    //};
-
-    /*const reducer = (state, action) => {
-        switch (action.type) {
-            case 'reset':
-                return setInitFields();
-            case 'change': {
-                const {
-                    payload: { name, value },
-                } = action;
-                return { ...state, [name]: value };
-            }
-            default:
-                return state;
-        }
-    };*/
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        setErrors(validateForm(fields, state));
-        console.log(errors);
-        if (errors.length === 0) {
-            console.log('state:', state);
-            addNewTask();
-            // dispatch({ type: 'reset' });
+    const markInputValid = (inputName) => {
+        if (!state[inputName].isValid) {
+            dispatch({
+                type: FORM_ACTIONS.SET_VALID,
+                payload: { name: inputName },
+            });
         }
     };
 
-    const addNewTask = () => {
-        console.log('state:', state);
-        const newTaskArr = fields.map((field) => {
+    const createErrors = (errorsArr) => {
+        const validator = new DataValidator();
+        const inputsNamesList = getInputsNames();
+        inputsNamesList.forEach((inputName) => {
+            const err = validator.checkDataErrors(inputName, state[inputName].value);
+            return err ? markInputInvalid(errorsArr, err, inputName) : markInputValid(inputName);
+        });
+    };
+
+    const findErrors = () => {
+        const errorsArr = [];
+        createErrors(errorsArr);
+        const errorsObj = convertArrToObj(errorsArr);
+        return errorsObj;
+    };
+
+    const prepareDataToSubmit = () => {
+        const dataArr = fields.map((field) => {
             const { name } = field;
-            const value = state[name];
+            const { value } = state[name];
             if (value.length !== 0) {
                 return {
                     [name]: value,
@@ -64,34 +63,47 @@ const Form = (props) => {
             }
             return null;
         });
-        const newTask = createNewTask(convertArrToObj(newTaskArr));
-        console.log('newTask:', newTask);
-        setNewTask(newTask);
-        dispatch({ type: 'reset' });
-        // editTasks({
-        //    type: 'add-task',
-        //    payload: { newTask },
-        //});
+        return convertArrToObj(dataArr);
+    };
+
+    const handleSend = () => {
+        const { closeModal } = props;
+        setErrors({});
+        const taskData = prepareDataToSubmit();
+        editTasks({
+            type: TASKS_ACTIONS.ADD,
+            payload: { taskData },
+        });
+        closeModal();
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const errorsObj = findErrors();
+        return isObjectEmpty(errorsObj) ? handleSend() : setErrors(errorsObj);
     };
 
     const renderFormFields = () =>
         fields.map((field) => (
-            <FormField key={field.name} field={field} formState={state} dispatch={dispatch} errors={errors} />
+            <FormField
+                key={field.name}
+                field={field}
+                formState={state}
+                errorsState={errors}
+                dispatch={dispatch}
+            />
         ));
 
     return (
         <>
-            <form onSubmit={handleSubmit} noValidate>
+            <h2 className="modal__title">new task</h2>
+            <form className="modal__form form" onSubmit={handleSubmit} noValidate>
                 {renderFormFields()}
-                <input type="submit" value="add new task" />
+                <input className="form__btn" type="submit" value="add" />
             </form>
-            <span>* required field</span>
+            <span className="modal__information">* required field</span>
         </>
     );
-};
-
-Form.propTypes = {
-    setNewTask: PropTypes.func,
 };
 
 export default Form;

@@ -1,39 +1,34 @@
+/* eslint-disable react/prop-types */
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
+import {
+    getColumnTasksQuantity,
+    createFilteredTasksList,
+    setColumnClassName,
+} from '../helpers/helpersFunctions';
 import { TasksContext } from '../context';
 import Task from './Task';
-import { setColumnClassName, createFilteredTasksList, getColumnTasksQuantity } from '../helpers/helpersFunctions';
-import './styles/Column.css';
+import '../styles/Column.css';
 
 const Column = (props) => {
     const {
         data: { id, name, limit, isDivided },
     } = props;
 
-    const { tasks } = useContext(TasksContext);
-    console.log(tasks);
-    // const tasks = [];
-
-    const renderNoTasks = () => (
-        <div className="column__placeholder">
-            <p className="column__msg">no tasks</p>
-        </div>
-    );
+    const tasks = useContext(TasksContext);
 
     const renderTasks = (is2ColLayout, isDoing = false) => {
         const tasksList = createFilteredTasksList(is2ColLayout, isDoing, tasks, id);
-        console.log(tasksList);
         return tasksList.map((task) => <Task data={task} key={task.id} />);
     };
 
-    const renderLayoutWith1Col = () => (
+    const render1ColLayout = () => (
         <div className="column__1col">
-            <span className="column__subheader"></span>
+            <span className="column__subheader" />
             <ul className="column__list column__list--1col">{renderTasks(isDivided)}</ul>
         </div>
     );
 
-    const renderLayoutWith2Col = () => (
+    const render2ColLayout = () => (
         <>
             <div className="column__2col">
                 <span className="column__subheader">doing</span>
@@ -48,7 +43,13 @@ const Column = (props) => {
 
     const renderColumn = () => (
         <div className={setColumnClassName(isDivided)}>
-            {isDivided ? renderLayoutWith2Col() : renderLayoutWith1Col()}
+            {isDivided ? render2ColLayout() : render1ColLayout()}
+        </div>
+    );
+
+    const renderNoTaskMsg = () => (
+        <div className="column__placeholder">
+            <p className="column__msg">no tasks</p>
         </div>
     );
 
@@ -57,24 +58,14 @@ const Column = (props) => {
             <header className={`column__header column__header--${name}`}>
                 <div className="column__wrapper">
                     <h2 className="column__title">{name}</h2>
-                    <p className="column__wip-limit">
-                        {getColumnTasksQuantity(tasks, id)}/{limit}
+                    <p className="column__info">
+                        {getColumnTasksQuantity(tasks, id)} / {limit}
                     </p>
                 </div>
-                <div>Fontawsome</div>
             </header>
-            {tasks.length === 0 ? renderNoTasks() : renderColumn()}
+            {tasks.length === 0 ? renderNoTaskMsg() : renderColumn()}
         </li>
     );
-};
-
-Column.propTypes = {
-    data: PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        limit: PropTypes.number,
-        isDivided: PropTypes.bool,
-    }),
 };
 
 export default Column;

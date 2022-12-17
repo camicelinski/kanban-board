@@ -1,5 +1,5 @@
 import ColumnsContext from './ColumnsContext';
 import TasksContext from './TasksContext';
-import EditTasksContext from './EditTasksContext';
+import EditContext from './EditContext';
 
-export { ColumnsContext, TasksContext, EditTasksContext };
+export { ColumnsContext, TasksContext, EditContext };

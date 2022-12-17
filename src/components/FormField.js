@@ -1,63 +1,61 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
+import { isObjectEmpty, setFieldClassName, getCurrentDate } from '../helpers/helpersFunctions';
+import { FORM_ACTIONS } from '../actions/actions';
+import '../styles/FormField.css';
 
 const FormField = (props) => {
     const handleChange = (e) => {
         const { dispatch } = props;
         const { name, value } = e.target;
         dispatch({
-            type: 'change-value',
+            type: FORM_ACTIONS.CHANGE_VALUE,
             payload: { name, value },
-            // key: field.name,
-            // value: e.target.value,
-            // type: 'change-value',
-            // payload: { name, value },
         });
     };
+
+    const showErrMsg = (errMsg) => <p className="form__err">{errMsg}</p>;
+
+    const renderErrorMsg = () => {
+        const {
+            field: { name: inputName },
+            errorsState,
+        } = props;
+        return !isObjectEmpty(errorsState) && errorsState[inputName]
+            ? showErrMsg(errorsState[inputName])
+            : null;
+    };
+
+    const setDateRange = (type) => (type === 'date' ? getCurrentDate() : null);
 
     const renderField = () => {
         const {
             field: { name, label, type = null, fieldName = 'input' },
             formState,
-            errors,
         } = props;
         const FieldName = fieldName;
-
         return (
             <>
-                <label htmlFor={name}>{label}</label>
-                <FieldName
-                    id={name}
-                    name={name}
-                    type={type}
-                    value={formState[name]}
-                    onChange={handleChange}
-                    autoComplete="off"
-                />
-                {errors.map((error) => {
-                    return error && error.field.name === name ? (
-                        <p key={`${error.field.name}: ${error.text}`} style={{ color: 'red' }}>
-                            {error.text}
-                        </p>
-                    ) : null;
-                })}
+                <label className="form__label" htmlFor={name}>
+                    {label}
+                    <FieldName
+                        className={setFieldClassName(name, formState, 'input')}
+                        id={name}
+                        name={name}
+                        type={type}
+                        value={formState[name].value}
+                        onChange={handleChange}
+                        min={setDateRange(type)}
+                        autoComplete="off"
+                    />
+                    <span className={setFieldClassName(name, formState, 'border')} />
+                </label>
+                <div className="form__placeholder">{renderErrorMsg()}</div>
             </>
         );
     };
 
-    return <div>{renderField()}</div>;
-};
-
-FormField.propTypes = {
-    dispatch: PropTypes.func,
-    field: PropTypes.shape({
-        name: PropTypes.string,
-        label: PropTypes.string,
-        type: PropTypes.string,
-        fieldName: PropTypes.string,
-    }),
-    formState: PropTypes.object,
-    errors: PropTypes.arrayOf(PropTypes.object),
+    return <div className="form__field">{renderField()}</div>;
 };
 
 export default FormField;
