@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+## 🔍 Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Kanban board app
 
-## Available Scripts
+Kanban is a methodology to design, manage and improve workflow systems. This app is a tool that helps to **visualize** the Kanban method and put it into practice.
 
-In the project directory, you can run:
+&nbsp;
 
-### `npm start`
+## :bulb: Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **adding tasks** with the specification of:
+    - name
+    - assigned person (name and e-mail address)
+    - deadline
+    - detailed description
+    - fields of the form are validated
+- **moving tasks** between the columns (according to the specified limits of the columns)
+- **deleting tasks**
+- **saving / deleting tasks using Local Storage** (refreshing the page does not cause loss of work progress)
+- kanban board is responsive
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+&nbsp;
 
-### `npm test`
+## :hammer_and_pick: Technologies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=Webpack&logoColor=white)
 
-### `npm run build`
+&nbsp;
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## ⚙️ Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The project uses [node](https://nodejs.org/en/), [npm](https://www.npmjs.com/) and [JSON server](https://www.npmjs.com/package/json-server). Follow the steps below to run it locally. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Clone the project using:
 
-### `npm run eject`
+```bash
+  git clone
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Go to the project directory and install all dependencies:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+  npm i
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- To run webpack and create a localhost in developer mode type:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+  npm start
+```
 
-## Learn More
+&nbsp;
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔗 Useful resources
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [Kanban explained](https://kanbanblog.com/explained/)
+- [What is Kanban?](https://www.youtube.com/watch?v=iVaFVa7HYj4&list=PLaD4FvsFdarR3oF1gp5_NmnlL-BQIE9sW&index=2) - 4 shorts videos with Kanban explained (by Max from Jira Software - Atlassian)
 
-### Code Splitting
+&nbsp;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## :envelope_with_arrow: Author
 
-### Analyzing the Bundle Size
+This project was made during my studies at Akademia Samouka.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Feel free to contact me:
+- [LinkedIn](https://br.linkedin.com/in/camila-montes-celinski-5a406942)
