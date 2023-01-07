@@ -33,7 +33,7 @@ Kanban is a methodology to design, manage and improve workflow systems. This app
 
 ## ⚙️ Installation
 
-The project uses [node](https://nodejs.org/en/), [npm](https://www.npmjs.com/) and [JSON server](https://www.npmjs.com/package/json-server). Follow the steps below to run it locally. 
+The project uses [node](https://nodejs.org/en/), [npm](https://www.npmjs.com/). Follow the steps below to run it locally. 
 
 - Clone the project using:
 
